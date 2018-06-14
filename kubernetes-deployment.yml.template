@@ -17,14 +17,15 @@ spec:
         run: ta-hotel
     spec:
       containers:
-      - image: bluezd/hotel:latest 
-        #imagePullPolicy: IfNotPresent 
+      - image: $OKE_REPOSITORY/$WERCKER_APPLICATION_NAME:$WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT 
         imagePullPolicy: Always 
         name: ta-hotel
         ports:
         - containerPort: 5000 
           protocol: TCP
       restartPolicy: Always
+      imagePullSecrets:
+        - name: ocirsecret
 ---
 apiVersion: v1
 kind: Service
