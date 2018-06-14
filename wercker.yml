@@ -1,12 +1,15 @@
 box:
   id: python:2.7
+  ports:
+    - "5000"
 build:
   steps:
     - script:
         name: install python library
         code: |
-            pip install flask
-            pip install flask_cors 
+            pip install --install-option="--prefix=/pipeline/source/" flask
+            pip install --install-option="--prefix=/pipeline/source/" flask_cors
+
     - script:
         name: check
         code: |
@@ -45,7 +48,7 @@ deploy-to-oke:
         
     - script:
         name: wait to delete namespace
-        code: sleep 30
+        code: sleep 60
         
     - kubectl:
         name: create namespace    

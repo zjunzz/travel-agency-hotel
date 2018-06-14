@@ -1,5 +1,9 @@
 #!C:\Python27\python.exe
 # -*- coding: utf8 -*-
+import os, sys
+if os.path.exists('./lib/python2.7/site-packages/'):
+    sys.path.append('./lib/python2.7/site-packages/')
+
 from flask import Flask
 from flask_cors import CORS
 import json
