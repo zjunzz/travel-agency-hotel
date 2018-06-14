@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ta-hotel
+  labels:
+    run: ta-hotel
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: ta-hotel
+    spec:
+      containers:
+      - image: bluezd/hotel:latest 
+        #imagePullPolicy: IfNotPresent 
+        imagePullPolicy: Always 
+        name: ta-hotel
+        ports:
+        - containerPort: 5000 
+          protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ta-hotel-svc
+spec:
+  selector:
+    run: ta-hotel
+  ports:
+    - port: 9003
+      targetPort: 5000 
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ta-hotel-ing
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    ingress.kubernetes.io/add-base-url: 'true'
+    #ingress.kubernetes.io/rewrite-target: /
+    #ingress.kubernetes.io/app-root: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /hotels
+        backend:
+          serviceName: ta-hotel-svc
+          servicePort: 9003
