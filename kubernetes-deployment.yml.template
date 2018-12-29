@@ -30,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ta-hotel-svc
+  name: ta-hotel
 spec:
   selector:
     run: ta-hotel
@@ -38,21 +38,3 @@ spec:
     - port: 9003
       targetPort: 5000 
   type: ClusterIP
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ta-hotel-ing
-  annotations:
-    kubernetes.io/ingress.class: 'nginx'
-    ingress.kubernetes.io/add-base-url: 'true'
-    #ingress.kubernetes.io/rewrite-target: /
-    #ingress.kubernetes.io/app-root: /
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /hotels
-        backend:
-          serviceName: ta-hotel-svc
-          servicePort: 9003
